@@ -1,8 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import './../assets/css/App.css';
-import { useDispatch } from "react-redux";
-import { login } from "../features/userSlice";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const user = {
@@ -11,16 +9,9 @@ const Login = () => {
     }
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate ();
-    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     function submitLogin() {
-
-        dispatch(login({
-            email: email,
-            password: password,
-            isLogged: true
-        }));
 
         if (email.toLowerCase() === user.email && password.toLowerCase() === user.password) {
             alert("Login successful!");

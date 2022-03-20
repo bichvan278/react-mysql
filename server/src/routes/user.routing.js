@@ -98,7 +98,7 @@ UserRouting.put('/:id', updateUser);
  *          description: A user with the specified ID was not found.
  *
  */
-UserRouting.delete('/delete/:id', deleteUser);
+UserRouting.delete('/:id', deleteUser);
 
 UserRouting.post('/avatar', upAvatar);
 
