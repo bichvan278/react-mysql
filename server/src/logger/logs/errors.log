@@ -900,3 +900,11 @@
 [2022-03-20 10:09:54] [[32minfo[39m]: ==================== constructor AuthenticationService====================
 [2022-03-20 10:09:54] [[32minfo[39m]: ==================== constructor RoleRepository====================
 [2022-03-20 10:09:54] [[32minfo[39m]: ==================== constructor RoleService====================
+[2022-03-20 13:23:36] [[32minfo[39m]: ==================== constructor AuthenticationRepository====================
+[2022-03-20 13:23:36] [[32minfo[39m]: ==================== constructor AuthenticationService====================
+[2022-03-20 13:23:36] [[32minfo[39m]: ==================== constructor RoleRepository====================
+[2022-03-20 13:23:36] [[32minfo[39m]: ==================== constructor RoleService====================
+[2022-03-20 14:05:18] [[32minfo[39m]: ==================== constructor AuthenticationRepository====================
+[2022-03-20 14:05:18] [[32minfo[39m]: ==================== constructor AuthenticationService====================
+[2022-03-20 14:05:18] [[32minfo[39m]: ==================== constructor RoleRepository====================
+[2022-03-20 14:05:18] [[32minfo[39m]: ==================== constructor RoleService====================

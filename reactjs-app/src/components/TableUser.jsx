@@ -43,12 +43,12 @@ const TableUser = () => {
     function isOpenningEdit(e) {
         const id = e.target.value;
         console.log("Edit:", id)
-        // if (id === '' || id === undefined) {
-        //     alert("Cannot find user!");
-        //     window.location.reload(true);
-        // } else {
-        //     setOpenModalEdit(true);
-        // }
+        if (id === '' || id === undefined) {
+            alert("Cannot find user!");
+            window.location.reload(true);
+        } else {
+            nagative(`/edit/${id}`);
+        }
     }
     // console.log("Edit:", userDetail[0]);
 

@@ -1,22 +1,12 @@
 import './../assets/css/App.css';
-import React, { useState } from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { createUser, getUserByID, updateUser } from '../redux/actions/userAction';
-import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
-const Modal = ({closeModal}) => {
+const Modal = ({closeModal, submitModal, id, data}) => {
 
-    const {id} = useParams();
     const isCurrentMode = !id;
     const dispatch = useDispatch();
-    if (id) {
-        return dispatch(getUserByID(id))
-        .then( result => {
-            console.log(result);
-            setnewUser(result);
-        })
-        .catch( e => console.log(e))
-    }
 
     const [Fullname, setFullname] = useState();
     const [Password, setPassword] = useState('');
@@ -29,7 +19,7 @@ const Modal = ({closeModal}) => {
     const [RoleID, setRoleID] = useState(2);
     const [Email, setEmail] = useState('');
 
-    const [newUser, setnewUser] = useState({
+    const newUser = {
         Fullname, 
         Email,
         Password, 
@@ -38,43 +28,22 @@ const Modal = ({closeModal}) => {
         Address,
         Status,
         RoleID
-    });
-
-    function submitModal() {
-        alert("Are you sure to submit?");
-        return isCurrentMode ? create(newUser) : update(id, updatedata);
     }
 
-    // Submit data form ADD user
-    function create(newUser) {
+    // Submit newUser form ADD user
+    function submitModalAdd() {
         if (newUser !== null) {
             console.log(newUser);
-        } else {
-            alert("Please fill in this form!");
-        }
-        return dispatch(createUser(newUser))
-        .then(res => {
-            if (res.status === 201) {
-                alert("Successful!");
-            }
-            alert("Failed!");
-        })
-        .catch(error => console.log(error));
-    }
-
-    // Submit modal UPDATE user
-    const [updatedata, setUpdateUser] = useState(newUser);
-    function update(id, updatedata) {
-        if (id !== '' || id !== undefined) {
-            console.log(id);
-            return dispatch(updateUser(id, updatedata))
+            return dispatch(createUser(newUser))
             .then(res => {
-                if (res.status === 200) {
+                if (res.status === 201) {
                     alert("Successful!");
                 }
                 alert("Failed!");
             })
             .catch(error => console.log(error));
+        } else {
+            alert("Please fill in this form!");
         }
     }
 
@@ -98,13 +67,13 @@ const Modal = ({closeModal}) => {
                             <div className="modal-frm-control">
                                 <span className="modal-frm-text">Fullname</span>
                                 <input  type="text" name="username" id="username"
-                                        value={newUser.Fullname} 
+                                        value={isCurrentMode ? newUser.Fullname : data.Fullname} 
                                         onChange={(e) => {setFullname(e.target.value)}} />
                             </div>
                             <div className="modal-frm-control">
                                 <span className="modal-frm-text">Password</span>
                                 <input  type="password" name="password" id="password"
-                                        value={newUser.Password}
+                                        value={isCurrentMode ? newUser.Password : data.Password}
                                         onChange={(e) => {setPassword(e.target.value)}} />
                             </div>
                         </div>
@@ -153,14 +122,14 @@ const Modal = ({closeModal}) => {
                         <div className="row">
                             <div className="modal-frm-control">
                                 <span className="modal-frm-text">Role</span>
-                                <select name="role" id="role">
+                                <select name="role" id="role" value={isCurrentMode ? newUser.RoleID : data.RoleID} >
                                     <option value="1" id="op-role">Administrator</option>
                                     <option value="2" id="op-role">Member</option>
                                 </select>
                             </div>
                             <div className="modal-frm-control">
                                 <span className="modal-frm-text">Status</span>
-                                <select name="status" id="status" >
+                                <select name="status" id="status" value={isCurrentMode ? newUser.Status : data.Status}>
                                     <option value="0" id="op-stt">Active</option>
                                     <option value="1" id="op-stt">InActive</option>
                                 </select>
@@ -172,13 +141,13 @@ const Modal = ({closeModal}) => {
                             <div className="modal-frm-control">
                                 <span className="modal-frm-text">Email</span>
                                 <input  type="email" name="email" id="email"
-                                        value={newUser.Email}
+                                        value={isCurrentMode ? newUser.Email : data.Email}
                                         onChange={(e) => {setEmail(e.target.value)}} />
                             </div>
                             <div className="modal-frm-control">
                                 <span className="modal-frm-text">Birthday</span>
                                 <input  type="date" name="dob" id="dob"
-                                        value={newUser.Dob}
+                                        value={isCurrentMode ? newUser.Dob : data.Dob}
                                         onChange={(e) => {setDob(e.target.value)}} />
                             </div>
                             {/* <div className="mess-error">
@@ -197,7 +166,7 @@ const Modal = ({closeModal}) => {
                                     <option value="1" id="op-phone">+82</option>
                                 </select>
                                 <input  type="number" name="phone" id="phone"
-                                        value={newUser.Phone}
+                                        value={isCurrentMode ? newUser.Phone : data.Phone}
                                         onChange={(e) => {setPhone(e.target.value)}} />
                             </div>
                             <div className="mess-error">
@@ -266,7 +235,7 @@ const Modal = ({closeModal}) => {
                             <div className="modal-frm-control">
                             <span className="modal-frm-text"></span>
                                 <input  type="text" name="address" id="address"
-                                        value={newUser.Addrerss}
+                                        value={isCurrentMode ? newUser.Address : data.Address}
                                         onChange={(e) => {setAddress(e.target.value)}} />
                                 <div className="mess-error">
                                     <span  id="mess-error10">
@@ -289,7 +258,7 @@ const Modal = ({closeModal}) => {
                         <div className="row" id="row">
                             <div className="modal-btn-control">
                                 <button className="cancelAdd" id="cancelAdd" type="reset">CANCEL</button>
-                                <button className="submitAdd" id="submitAdd" type="submit" onClick={submitModal}>SAVE</button>
+                                <button className="submitAdd" id="submitAdd" type="submit" onClick={isCurrentMode ? submitModalAdd : submitModal}>SAVE</button>
                             </div>
                         </div>
                     </form>

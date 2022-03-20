@@ -17,6 +17,12 @@ const userReducer = (state = initialState, action) => {
         case GET_USER_BY_ID:
             console.log("Payload ID:", payload[0]);
             return payload;
+        case CREATE_USER:
+            return payload;
+        case UPDATE_USER:
+            return payload;
+        case DELETE_USER:
+            return payload;
         default:
             return state;
     }
