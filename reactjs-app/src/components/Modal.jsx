@@ -1,9 +1,22 @@
 import './../assets/css/App.css';
 import React, { useState } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import { createUser } from '../redux/actions/userAction';
+import { createUser, getUserByID, updateUser } from '../redux/actions/userAction';
+import { useParams } from 'react-router-dom';
 
-const Modal = ({closeModal, submitAddUser, dataAdd}) => {
+const Modal = ({closeModal}) => {
+
+    const {id} = useParams();
+    const isCurrentMode = !id;
+    const dispatch = useDispatch();
+    if (id) {
+        return dispatch(getUserByID(id))
+        .then( result => {
+            console.log(result);
+            setnewUser(result);
+        })
+        .catch( e => console.log(e))
+    }
 
     const [Fullname, setFullname] = useState();
     const [Password, setPassword] = useState('');
@@ -16,7 +29,7 @@ const Modal = ({closeModal, submitAddUser, dataAdd}) => {
     const [RoleID, setRoleID] = useState(2);
     const [Email, setEmail] = useState('');
 
-    const dataAdd = {
+    const [newUser, setnewUser] = useState({
         Fullname, 
         Email,
         Password, 
@@ -25,6 +38,44 @@ const Modal = ({closeModal, submitAddUser, dataAdd}) => {
         Address,
         Status,
         RoleID
+    });
+
+    function submitModal() {
+        alert("Are you sure to submit?");
+        return isCurrentMode ? create(newUser) : update(id, updatedata);
+    }
+
+    // Submit data form ADD user
+    function create(newUser) {
+        if (newUser !== null) {
+            console.log(newUser);
+        } else {
+            alert("Please fill in this form!");
+        }
+        return dispatch(createUser(newUser))
+        .then(res => {
+            if (res.status === 201) {
+                alert("Successful!");
+            }
+            alert("Failed!");
+        })
+        .catch(error => console.log(error));
+    }
+
+    // Submit modal UPDATE user
+    const [updatedata, setUpdateUser] = useState(newUser);
+    function update(id, updatedata) {
+        if (id !== '' || id !== undefined) {
+            console.log(id);
+            return dispatch(updateUser(id, updatedata))
+            .then(res => {
+                if (res.status === 200) {
+                    alert("Successful!");
+                }
+                alert("Failed!");
+            })
+            .catch(error => console.log(error));
+        }
     }
 
     return (
@@ -32,7 +83,9 @@ const Modal = ({closeModal, submitAddUser, dataAdd}) => {
             <div className="modal-box" id="modal-box">
                 <div className="container" id="c-modal">
                     <div className="modal-title">
-                        <h2 className="modal-text">add user</h2>
+                        <h2 className="modal-text">
+                            {isCurrentMode ? 'add user' : 'edit user'}
+                        </h2>
                         <span   className="modal-close" 
                                 id="modal-close"
                                 onClick={() => closeModal(false)}>
@@ -45,13 +98,13 @@ const Modal = ({closeModal, submitAddUser, dataAdd}) => {
                             <div className="modal-frm-control">
                                 <span className="modal-frm-text">Fullname</span>
                                 <input  type="text" name="username" id="username"
-                                        value={dataAdd.Fullname} 
+                                        value={newUser.Fullname} 
                                         onChange={(e) => {setFullname(e.target.value)}} />
                             </div>
                             <div className="modal-frm-control">
                                 <span className="modal-frm-text">Password</span>
                                 <input  type="password" name="password" id="password"
-                                        value={dataAdd.Password}
+                                        value={newUser.Password}
                                         onChange={(e) => {setPassword(e.target.value)}} />
                             </div>
                         </div>
@@ -76,13 +129,13 @@ const Modal = ({closeModal, submitAddUser, dataAdd}) => {
                             <div className="modal-frm-control">
                                 <span className="modal-frm-text">First name</span>
                                 <input  type="text" className="firstname" id="firstname"
-                                        value={dataAdd.Firstname}
+                                        value={newUser.Firstname}
                                         onChange={(e) => {setFirstname(e.target.value)}} />
                             </div>
                             <div className="modal-frm-control">
                                 <span className="modal-frm-text">Last name</span>
                                 <input  type="text" name="lastname" id="lastname"
-                                        value={dataAdd.Lastname}
+                                        value={newUser.Lastname}
                                         onChange={(e) => {setLastname(e.target.value)}} />
                             </div>
                         </div>
@@ -119,13 +172,13 @@ const Modal = ({closeModal, submitAddUser, dataAdd}) => {
                             <div className="modal-frm-control">
                                 <span className="modal-frm-text">Email</span>
                                 <input  type="email" name="email" id="email"
-                                        value={dataAdd.Email}
+                                        value={newUser.Email}
                                         onChange={(e) => {setEmail(e.target.value)}} />
                             </div>
                             <div className="modal-frm-control">
                                 <span className="modal-frm-text">Birthday</span>
                                 <input  type="date" name="dob" id="dob"
-                                        value={dataAdd.Dob}
+                                        value={newUser.Dob}
                                         onChange={(e) => {setDob(e.target.value)}} />
                             </div>
                             {/* <div className="mess-error">
@@ -144,7 +197,7 @@ const Modal = ({closeModal, submitAddUser, dataAdd}) => {
                                     <option value="1" id="op-phone">+82</option>
                                 </select>
                                 <input  type="number" name="phone" id="phone"
-                                        value={dataAdd.Phone}
+                                        value={newUser.Phone}
                                         onChange={(e) => {setPhone(e.target.value)}} />
                             </div>
                             <div className="mess-error">
@@ -213,7 +266,7 @@ const Modal = ({closeModal, submitAddUser, dataAdd}) => {
                             <div className="modal-frm-control">
                             <span className="modal-frm-text"></span>
                                 <input  type="text" name="address" id="address"
-                                        value={dataAdd.Addrerss}
+                                        value={newUser.Addrerss}
                                         onChange={(e) => {setAddress(e.target.value)}} />
                                 <div className="mess-error">
                                     <span  id="mess-error10">
@@ -236,7 +289,7 @@ const Modal = ({closeModal, submitAddUser, dataAdd}) => {
                         <div className="row" id="row">
                             <div className="modal-btn-control">
                                 <button className="cancelAdd" id="cancelAdd" type="reset">CANCEL</button>
-                                <button className="submitAdd" id="submitAdd" type="submit" onClick={submitAddUser}>SAVE</button>
+                                <button className="submitAdd" id="submitAdd" type="submit" onClick={submitModal}>SAVE</button>
                             </div>
                         </div>
                     </form>

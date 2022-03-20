@@ -19,27 +19,7 @@ const TableUser = () => {
     // Open Modal Add User
     const [openModal, setOpenModal] = useState(false);
     const isOpenning = () => setOpenModal(true);
-    const [newUser, setAdduser] = useState({});
-    // Submit data form ADD user
-    function submitAddUser() {
-        if (newUser !== null) {
-            console.log(newUser);
-            // alert("Are you sure to submit?");
-            // window.location.reload(true);
-            // dispatch(createUser(newUser))
-            // .then(res => {
-            //     if (res.status === 201) {
-            //         alert("Successful!");
-            //     }
-            //     alert("Failed!");
-            // })
-            // .catch(error => console.log(error));
-        } else {
-            alert("Please fill in this form!");
-        }
-    }
 
-    
     // Open Modal Detail by ID
 
     // const [openModalDetail, setOpenModalDetail] = useState(false);
@@ -166,7 +146,7 @@ const TableUser = () => {
                 </tfoot>
             </table>
             {/* Modal */}
-            { openModal && <Modal dataAdd={newUser} submitAddUser={submitAddUser} closeModal={setOpenModal} />}
+            { openModal && <Modal closeModal={setOpenModal} />}
             {/* { openModalDetail && <ModalDetail userdetail={userDetail[0]} closeModalDetail={setOpenModalDetail} />} */}
             {/* { openModalEdit && <Modal userData={userDetail[0]} closeModal={setOpenModalEdit} />} */}
         </div>
